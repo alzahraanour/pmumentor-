@@ -1,0 +1,56 @@
+CREATE TABLE Department
+(
+  Dnumber_ INT NOT NULL,
+  Dname VARCHAR(20) NOT NULL,
+  Mgr_start_data INT NOT NULL,
+  Mgr_ssn CHAR(9) NOT NULL,
+  PRIMARY KEY (Dnumber ),
+  FOREIGN KEY (Mgr_ssn) REFERENCES Employee(SSN) // warning: circular dependency detected
+);
+
+CREATE TABLE Employee
+(
+  Fname VARCHAR(20) NOT NULL,
+  Minit CHAR(1) NOT NULL,
+  Lname VARCHAR(20) NOT NULL,
+  Salary NUMERIC(6,2) NOT NULL,
+  Address VARCHAR(50) NOT NULL,
+  SSN CHAR(9) NOT NULL,
+  DOB DATE NOT NULL,
+  Dno INT NOT NULL,
+  Super_ssn CHAR(9) NOT NULL,
+  PRIMARY KEY (SSN),
+  FOREIGN KEY (Dno) REFERENCES Department(Dnumber_) // warning: circular dependency detected,
+  FOREIGN KEY (Super_ssn) REFERENCES Employee(SSN) // warning: circular dependency detected
+);
+
+CREATE TABLE Dependent
+(
+  Dependent_name VARCHAR(20) NOT NULL,
+  sex CHAR(1) NOT NULL,
+  DOB DATE NOT NULL,
+  Relationship VARCHAR(20) NOT NULL,
+  Essn CHAR(9) NOT NULL,
+  PRIMARY KEY (Dependent_name, Essn),
+  FOREIGN KEY (Essn) REFERENCES Employee(SSN)
+);
+
+CREATE TABLE Project
+(
+  Pnumber INT NOT NULL,
+  Pname VARCHAR(20) NOT NULL,
+  Plocation VARCHAR(20) NOT NULL,
+  Dnum INT NOT NULL,
+  PRIMARY KEY (Pnumber),
+  FOREIGN KEY (Dnum) REFERENCES Department(Dnumber_)
+);
+
+CREATE TABLE Works_on
+(
+  Hours NUMERIC(3,1) NOT NULL,
+  Essn CHAR(9) NOT NULL,
+  Pno INT NOT NULL,
+  PRIMARY KEY (Essn, Pno),
+  FOREIGN KEY (Essn) REFERENCES Employee(SSN),
+  FOREIGN KEY (Pno) REFERENCES Project(Pnumber)
+);
